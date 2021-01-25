@@ -1,0 +1,8 @@
+{
+  "extends": "airbnb-base",
+  "eslint no-underscore-dangle": "error",
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"]
+}
+}
