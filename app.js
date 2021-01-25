@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require ('path');
-const fs = require('fs').promises;
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
@@ -12,11 +11,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', (req, res) => {
-//   res.send('index.html');
-// })
 app.use('/', cardsRouter);
 app.use('/', usersRouter);
+app.use('*', (req, res) => {
+  res.status(404).send({"message": `Page with path ${req.originalUrl} not found`})
+})
 
 app.listen(PORT, ()=>{
   console.log(`server listening port ${PORT}`);

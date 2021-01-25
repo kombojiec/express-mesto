@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const {users} = require('../data/users.json');
 const path = require ('path');
 const fs = require('fs').promises;
 
@@ -7,27 +6,21 @@ const fs = require('fs').promises;
 router.get('/users', (req, res) => {
   fs.readFile(path.join(__dirname, '..', 'data', 'users.json'))
   .then(content => res.send(JSON.parse(content)))
-  .catch(err => console.log(err))
+  .catch(() => res.status(500).send({"message":"Сервер не отвечает"}))
 })
 
 router.get('/users/:id', (req, res) => {
   const users = [];
   fs.readFile(path.join(__dirname, '..','data', 'users.json'))
-  .then(content => users.push(JSON.parse(content)))
-  .then(() => {
-    const result = [];
-    users[0].forEach(user => {
-    if(user._id === req.params.id){
-      result.push(user);
-    }
-    });
-    if(result.length){
-      res.send(result);
+  .then(content => {
+    const user = JSON.parse(content).find((user) => user._id === req.params.id)
+    if(user){
+      res.send(user);
     }else{
-      res.status(404);
-      res.send({ "message": "Нет пользователя с таким id" })
+      res.status(404).send({ "message": "Нет пользователя с таким id" })
     }
   })
+  .catch(() => res.status(500).send({"message":"Сервер не отвечает"}))
 })
 
 module.exports = router;
