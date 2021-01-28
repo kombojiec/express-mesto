@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
   name: {
@@ -16,11 +16,11 @@ const userSchema = new Schema({
   avatar: {
     required: true,
     type: String,
-  }
-})
+  },
+});
 
 userSchema.path('avatar').validate((value) => {
-  urlRegex = /(http|https):\/\/(www\.)?(\w+)(\S+)\#?/;
+  const urlRegex = /(http|https):\/\/(www\.)?(\w+)(\S+)#?/;
   return urlRegex.test(value);
 }, 'Invalid URL.');
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const cardSchema = new Schema({
   name: {
@@ -15,16 +15,22 @@ const cardSchema = new Schema({
   owner: {
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'UserSchema',
+    ref: 'user',
   },
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     default: [],
   }],
   created: {
     type: Date,
     default: Date.now,
-  }
-})
+  },
+});
+
+cardSchema.path('link').validate((value) => {
+  const urlRegex = /(http|https):\/\/(www\.)?(\w+)(\S+)#?/;
+  return urlRegex.test(value);
+}, 'Invalid URL.');
 
 module.exports = model('card', cardSchema);
