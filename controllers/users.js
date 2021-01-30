@@ -21,10 +21,17 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   User.findById(req.params.id)
+    .orFail(new Error('No user'))
     .then((user) => {
       res.send(user);
     })
-    .catch(() => res.status(404).send({ message: 'Пользователь не найден' }));
+    .catch((error) => {
+      if (error.message === 'No user') {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      } else {
+        res.status(500).send({ message: 'Сервер не отвечает' });
+      }
+    });
 };
 
 const updateUserInfo = (req, res) => {
