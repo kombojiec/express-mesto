@@ -5,7 +5,7 @@ const createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'validationError') {
+      if (err._message === 'user validation failed') {
         res.status(400).send({ message: 'Не корректные данные' });
       } else {
         res.status(500).send({ message: 'Что-то пошло не так...' });
@@ -26,7 +26,7 @@ const getUserById = (req, res) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.message === 'No user') {
+      if (error.message === 'No user' || error.name === 'CastError') {
         res.status(404).send({ message: 'Пользователь не найден' });
       } else {
         res.status(500).send({ message: 'Сервер не отвечает' });

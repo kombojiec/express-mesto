@@ -49,6 +49,8 @@ const addLike = (req, res) => {
     .catch((error) => {
       if (error.message === 'Has already') {
         res.status(404).send({ message: 'Лайк уже поставлен' });
+      } else if (error.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь не найден' });
       } else {
         res.status(500).send({ message: 'Сервер не отвечает' });
       }
@@ -65,7 +67,9 @@ const removeLike = (req, res) => {
     .then((card) => res.send(card))
     .catch((error) => {
       if (error.message === 'Has already') {
-        res.status(404).send({ message: 'Лайк уже поставлен' });
+        res.status(404).send({ message: 'Лайк уже удалён' });
+      } else if (error.name === 'CastError') {
+        res.status(404).send({ message: 'Пользователь не найден' });
       } else {
         res.status(500).send({ message: 'Сервер не отвечает' });
       }
